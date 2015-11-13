@@ -1,63 +1,47 @@
+import java.util.Scanner;
+import java.io.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-public class Calculadora 
+public class Calculadora implements Runnable
+{
+	private Operacao operacao;
+	private Operacao vaux;
+	
+	public Calculadora(Operacao opera)
 	{
-			int op1, op2;
-			char operador;
-			float resultado;
-		
-			public double calcula(int op1, int op2, char operador) 
+		this.operacao = opera;
+	}
+	
+	@Override
+	public void run()
+	{
+		while (true)
+		{
+			vaux = operacao.getOk();
+			int res; 
+				
+			if(vaux.getOperador() == '+')
 			{
-				double result = 0;
-				this.op1 = op1;
-				this.op2 = op2;
-				this.operador = operador;
-				
-				switch (operador) 
+				res = vaux.somar();
+			}
+			else 
+				if (vaux.getOperador() == '-')
 				{
-					case '+':
-						{
-							result = op1 + op2;
-							break;
-						}
-					case '-':
-						{
-							result = op1 - op2;
-							break;
-						}
-					case '/':
-						{
-							result = op1 / op2;
-							break;
-						}
-					case '*':
-						{
-							result = op1* op2;
-							break;
-						}
-				}
-				
-				try 
-				{
-					PrintWriter log = new PrintWriter(new FileWriter("log.txt",true), true);
-					log.write(this.dados());
-					log.close();
+					res = vaux.subtrair();			
 				} 
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-					
-				}
-				return result;
-			}
-		
-			public String dados() 
-			{
-		
-		
-				return (String.valueOf(op1) + operador + String.valueOf(op2));
-			}
+				else 
+					if(vaux.getOperador() == '*') 
+					{
+						res = vaux.multiplicar();			
+					} 
+					else 
+					{
+						res = vaux.dividir();
+					}
+				
+			System.out.printf("Resultado: %d\n", res);
 		}
+	
+	}
+
+	
+}
